@@ -10,11 +10,16 @@ app.use(express.json())
 let db
 
 connectToDb((err) =>{
+
+    const port = process.env.PORT || 3000
+
     if(!err){
-        app.listen(process.env.PORT, () => {
+
+        db = getDb()
+
+        app.listen(port, () => {
             console.log('app listening on enviroment port')
         })
-        db = getDb()
     }
 })
 
