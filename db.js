@@ -1,9 +1,11 @@
-const { MongoClient } = require('mongodb')
+const { MongoClient } = require('mongodb').MongoClient
+
 let dbConnection
+const uri = process.env.MONGO_URI
 
 module.exports = {
     connectToDb: (cb) => {
-        MongoClient.connect(process.env.MONGO_URI)
+        MongoClient.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true})
         .then((client) => {
             dbConnection = client.db()
             return cb()
