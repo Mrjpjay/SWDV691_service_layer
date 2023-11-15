@@ -50,6 +50,31 @@ app.get('/Event', (req, res) =>{
       })
 })
 
+app.delete('/Event/:id', (req,res) =>{
+    db.collection('Event')
+    .deleteOne({_id: new ObjectId(req.params.id)})
+    .then(result =>{
+        res.status(200).json(result)
+    })
+    .catch(err =>{
+        res.status(500).json({error: 'Could not delete the event'})
+    })
+})
+
+//put or update
+app.patch('/Event/:id',(req,res) =>{
+    const updates = req.body
+
+    db.collection('Event')
+    .updateOne({_id: new ObjectId(req.params.id)}, {$set: updates})
+    .then(result =>{
+        res.status(200).json(result)
+    })
+    .catch(err =>{
+        res.status(500).json({error: 'Could not update the event'})
+    })
+})
+
 //get all courses
 app.get('/Course', (req, res) =>{
     let courses = []
