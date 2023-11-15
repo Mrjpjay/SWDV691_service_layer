@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "655265cd9a7d733a2c2c02a9"
+  },
+  "course": {
+    "_id": "65525dfe9a733a2c2c02a3",
+    "courseCode": "0001",
+    "title": "Software Development",
+    "description": "This is the SD course description",
+    "instructor": "Sonic the hedgehog",
+    "enrolledStudents": [
+      "studentId",
+      "studentId",
+      "studentId",
+      "studentId",
+      "studentId",
+      "studentId"
+    ]
+  }
+}]

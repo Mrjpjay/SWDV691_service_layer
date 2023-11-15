@@ -1,0 +1,34 @@
+[{
+  "_id": {
+    "$oid": "655262699a7d733a2c2c02a4"
+  },
+  "user": {
+    "_id": "65525dfe9a7d733a2c2c02a3",
+    "username": "Romero",
+    "email": "test@test.com",
+    "password": "passwordTest",
+    "fullName": "Juan Pablo Romero Quezada",
+    "profilePicture": "path_to_pp_.png",
+    "major": "Software Development",
+    "enrolledCourses": [
+      "courseId",
+      "courseId",
+      "courseId",
+      "courseId",
+      "courseId",
+      "courseId"
+    ],
+    "communityInteractions": [
+      "communityId",
+      "communityId",
+      "communityId",
+      "communityId"
+    ],
+    "calendarEvents": [
+      "eventId",
+      "eventId",
+      "eventId",
+      "eventId"
+    ]
+  }
+}]

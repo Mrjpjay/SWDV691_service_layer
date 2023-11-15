@@ -1,0 +1,18 @@
+[{
+  "_id": {
+    "$oid": "655269db9a7d733a2c2c02ac"
+  },
+  "community": {
+    "_id": "65525dfe9a733a2c2c02a3",
+    "title": "Software Development forum",
+    "content": "Software Development forum content",
+    "author": "Romero Juan Pablo",
+    "comments": [
+      {
+        "commenter": "Robert A",
+        "comment": "What time is school tomorrow?",
+        "timestamp": "Nov 30 2023"
+      }
+    ]
+  }
+}]

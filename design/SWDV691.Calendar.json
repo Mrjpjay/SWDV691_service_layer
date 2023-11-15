@@ -1,0 +1,11 @@
+[{
+  "_id": {
+    "$oid": "65526aa79a7d733a2c2c02af"
+  },
+  "calendar": {
+    "_id": "65525dfe9a733a2c2c02a3",
+    "title": "Software Development live event",
+    "content": "Software Development live event description",
+    "date": "Nov 30th 2023"
+  }
+}]

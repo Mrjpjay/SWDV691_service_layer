@@ -1,0 +1,17 @@
+[{
+  "_id": {
+    "$oid": "65526b559a7d733a2c2c02b2"
+  },
+  "event": {
+    "_id": "65525dfe9a733a2c2c02a3",
+    "title": "Software Development live event",
+    "content": "Software Development live event",
+    "date": "Nov 30 2023",
+    "location": "google.meet/location",
+    "attendees": [
+      "studentId",
+      "studentId",
+      "studentId"
+    ]
+  }
+}]
