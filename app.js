@@ -4,7 +4,12 @@ const { ObjectId } = require('mongodb')
 
 //init and create the app
 const app = express()
+
+// Middleware for parsing JSON data
 app.use(express.json())
+
+// Middleware for serving static files from the 'public' directory
+app.use(express.static('public'));
 
 //db connection
 let db
@@ -24,6 +29,11 @@ connectToDb((err) =>{
 })
 
 /*routes*/
+
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/public/singup.html');
+});
+
 
 //get all users
 app.get('/User', (req, res) =>{
