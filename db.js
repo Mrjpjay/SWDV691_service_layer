@@ -1,7 +1,7 @@
 const { MongoClient } = require('mongodb')
 
 let dbConnection
-const uri = process.env.MONGO_URI
+const uri = process.env.MONGO_URI || 'mongodb://localhost:27017/SWDV691'
 
 module.exports = {
     connectToDb: (cb) => {

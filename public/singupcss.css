@@ -8,7 +8,8 @@
             height: 100%;
         }
 
-        .login-container {
+        .singup-container {
+            width: 500px;
             background-color: white;
             padding: 40px;
             margin: auto;
@@ -18,7 +19,7 @@
             align-items: center;
         }
 
-        h3 , a{
+        h3 {
             font-size: small;
             color: #000080;
             text-align-last: right;
@@ -55,11 +56,5 @@
             height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: flex-end;
             background: url(portrait.jpg) no-repeat;
-        }
-
-        .logo{
-            width: 100px;
-            height: 100px;
         }
