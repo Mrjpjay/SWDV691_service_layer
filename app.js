@@ -109,11 +109,33 @@ app.get('/Course', (req, res) => {
 })
 
 //get user by id
-app.get('/User/:id', (req, res) => {
+app.post('/Login', (req, res) => {
+    console.log('jpr '+req.body.username)
+    const user = req.body
+    const username = user.username
+    const password = user.password
+
+    const insert = {
+        user: {
+            username: username,
+            email: "",
+            password: password,
+            profilePicture: "",
+            major: "",
+            enrolledCourses: [],
+            communityInteractions: [],
+            calendarEvents: []
+        }
+    }
+
     db.collection('User')
-        .findOne({ _id: new ObjectId(req.params.id) })
-        .then(doc => {
-            res.status(200).json(doc)
+        .findOne({"user.username": insert.user.username, "user.password": insert.user.password})
+        .then(response => {
+            if(response){
+                res.redirect('/home.html')
+            } else {
+                res.status(404).json({ error: 'Username or password is incorrect' });
+            }
         })
         .catch(err => {
             res.status(500).json({ error: 'Could not fetch the user' })
@@ -135,30 +157,16 @@ app.get('/community/:id', (req, res) => {
 //create user
 app.post('/User', (req, res) => {
     const user = req.body
-    const pass = user.password
-    const confirm = user.confirmpass
+    const pass = user.user.password
+    const confirm = user.user.confirmpass
 
     if (pass !== confirm) {
         // Redirect to an error page 
         return res.redirect('/error-page.html');
     }
 
-    // Prepare user object for insertion
-    const userToInsert = {
-        user: {
-            username: user.firstname,
-            email: user.email,
-            password: user.password,
-            profilePicture: '',
-            major: '',
-            enrolledCourses: [],
-            communityInteractions: [],
-            calendarEvents: []
-        }
-    };
-
     db.collection('User')
-        .insertOne(userToInsert)
+        .insertOne(user)
         .then(result => {
             res.redirect('/home.html')
         })
