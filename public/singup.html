@@ -5,6 +5,10 @@
     <meta charset="UTF-8">
     <title>Maryville Hub</title>
     <link rel="stylesheet" type="text/css" href="singupcss.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -14,10 +18,54 @@
         <div class="container">
             <div class="singup-container">
                 <h2>Create account</h2>
-                <form action="/User" method="post" id="signupForm">
+                <form action="/Register" method="post" id="signupForm">
                     <input type="text" id="firstname" name="firstname" placeholder="First name" required>
                     <input type="text" id="lastname" name="lastname" placeholder="Last name" required>
                     <input type="text" id="email" name="email" placeholder="Email" required>
+                    <h6>Choose your major</h6>
+                    <select name="majors" id="majors" required>
+                        <option value="" disabled selected>Select a Program</option>
+                        <option value="accounting">Accounting</option>
+                        <option value="business_administration">Business Administration</option>
+                        <option value="communication">Communication</option>
+                        <option value="communication_sciences_and_disorders">Communication Sciences and Disorders
+                        </option>
+                        <option value="computer_science">Computer Science</option>
+                        <option value="criminal_justice_criminology">Criminal Justice/Criminology</option>
+                        <option value="cyber_security">Cyber Security</option>
+                        <option value="data_science">Data Science</option>
+                        <option value="digital_media">Digital Media</option>
+                        <option value="english">English</option>
+                        <option value="exercise_science">Exercise Science</option>
+                        <option value="finance">Finance</option>
+                        <option value="forensic_psychology">Forensic Psychology</option>
+                        <option value="general_studies_healthcare">General Studies with a Concentration in Healthcare
+                        </option>
+                        <option value="general_studies_healthcare_prelicensure">General Studies with a Concentration in
+                            Healthcare Pre-Licensure Track (On Campus)</option>
+                        <option value="healthcare_management">Healthcare Management</option>
+                        <option value="history">History</option>
+                        <option value="human_development_family_studies">Human Development and Family Studies</option>
+                        <option value="human_resource_management">Human Resource Management</option>
+                        <option value="international_studies">International Studies</option>
+                        <option value="liberal_studies">Liberal Studies</option>
+                        <option value="management_information_systems">Management Information Systems</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="mathematics">Mathematics</option>
+                        <option value="nursing_rn_bsn">Nursing RN to BSN Completion</option>
+                        <option value="organizational_leadership">Organizational Leadership</option>
+                        <option value="psychology">Psychology</option>
+                        <option value="rawlings_sport_business_management">Rawlings Sport Business Management</option>
+                        <option value="social_work">Social Work</option>
+                        <option value="sociology">Sociology</option>
+                        <option value="sustainability">Sustainability</option>
+                        <option value="artificial_intelligence_certificate">Artificial Intelligence Certificate</option>
+                        <option value="blockchain_certificate">Blockchain Certificate</option>
+                        <option value="cybersecurity_certificate">Cybersecurity Certificate</option>
+                        <option value="data_science_certificate">Data Science Certificate</option>
+                        <option value="software_development_certificate">Software Development Certificate</option>
+                        <option value="ux_ui_certificate">UX/UI Certificate</option>
+                    </select>
                     <input type="password" id="password" name="password" placeholder="Password" required>
                     <input type="password" id="confirmpass" name="confirmpass" placeholder="Confirm password" required>
                     <input type="submit" id="submit" value="Sign up">

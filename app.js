@@ -110,7 +110,6 @@ app.get('/Course', (req, res) => {
 
 //get user by id
 app.post('/Login', (req, res) => {
-    console.log('jpr '+req.body.username)
     const user = req.body
     const username = user.username
     const password = user.password
@@ -155,18 +154,35 @@ app.get('/community/:id', (req, res) => {
 })
 
 //create user
-app.post('/User', (req, res) => {
+app.post('/Register', (req, res) => {
     const user = req.body
-    const pass = user.user.password
-    const confirm = user.user.confirmpass
+    const firstName = user.firstname
+    const lastName = user.lastname
+    const email = user.email
+    const pass = user.password
+    const confirm = user.confirmpass
+    const majors = user.majors
 
     if (pass !== confirm) {
         // Redirect to an error page 
         return res.redirect('/error-page.html');
     }
 
+    const insert = {
+        user: {
+            username: firstName,
+            email: email,
+            password: pass,
+            profilePicture: "",
+            major: majors,
+            enrolledCourses: [],
+            communityInteractions: [],
+            calendarEvents: []
+        }
+    }
+
     db.collection('User')
-        .insertOne(user)
+        .insertOne(insert)
         .then(result => {
             res.redirect('/home.html')
         })
