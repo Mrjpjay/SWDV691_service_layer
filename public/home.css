@@ -1,0 +1,108 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+a {
+    text-decoration: none; 
+    color: inherit; 
+}
+
+a :hover{
+    color:#0069d9;
+}
+
+.main-containers{
+    display: flex;
+    justify-content: space-between;
+}
+
+.left-container {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
+
+.right-container{
+    margin-right: 10%;
+    margin-top: 5%;
+    margin-left: 1%;
+}
+
+.welcome-section {
+    text-align: center;
+    padding: 20px;
+}
+
+.features {
+    display: flex;
+    margin-left: 20%;
+}
+
+.features_below {
+    display: flex;
+    margin-left: 20%;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+    width: 250px;
+    height: 250px;
+}
+
+.feature-card.profile{
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.feature-card.community{
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.feature-card.calendar:hover{
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.feature-card.course:hover{
+    border-color: #0069d9;
+}
+
+.feature-card.profile:hover{
+    border-color: #0069d9;
+}
+
+.feature-card.events:hover{
+    border-color: #0069d9;
+}
+
+.feature-card.community:hover{
+    border-color: #0069d9;
+}
+
+.feature-card.calendar:hover{
+    border-color: #0069d9;
+}
+
+.feature-card.community{
+    margin-right: 10px;
+}
+
+.feature-card.course{
+    width: 550px;
+    height: 550px;
+}
+
+footer {
+    text-align: center;
+    background-color: #f1f1f1;
+    padding: 10px 20px;
+}
