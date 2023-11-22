@@ -1,0 +1,50 @@
+
+.parent-container-course{
+    display: flex;
+}
+
+.left-container-course{
+    margin: 5px;
+}
+
+.right-container-course{
+    margin: 5px;
+}
+
+.feature-card.majors{
+    border: 2px solid #ddd;
+    height: 100vh;
+}
+
+.enroll{
+    font-family: 'Poppins', sans-serif;
+}
+.feature-card.major-title{
+    border: 2px solid #ddd;
+    margin-bottom: 5px;
+}
+
+.feature-card.major-detail-title{
+    border: 2px solid #ddd;
+    margin-bottom: 5px;
+}
+
+.feature-card.major-detail{
+    height: 70vh;
+}
+.major-list {
+    padding: 0%;
+    margin: 0%;
+    list-style-type: none;
+}
+
+.major-list li:nth-child(odd) {
+    background-color: #D3D3D3;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
