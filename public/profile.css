@@ -1,0 +1,121 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+h5 {
+    color: gray;
+}
+
+.bio {
+    overflow-wrap: break-word;
+    width: 400px;
+}
+
+ul {
+    padding: 0%;
+    margin: 0%;
+    list-style-type: none;
+}
+
+ul li:nth-child(odd) {
+    background-color: #D3D3D3;
+}
+
+.left-container-p {
+    display: flex;
+    margin-top: 2%;
+    margin-bottom: 5%;
+}
+
+.bio-section {
+    display: flex;
+}
+
+.edit-btn {
+    object-fit: cover;
+    align-self: center;
+}
+
+.right-container {
+    height: 100vh;
+    position: relative;
+}
+
+.logout {
+    position: absolute;
+    bottom: 0;
+}
+
+.image-editor{
+    display: flex;
+}
+
+.edit-image{
+    object-fit: cover;
+    align-self: center;
+    margin-top: 20px;
+}
+
+.circular-image {
+    display: flex;
+    border: 2px solid gray;
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin-left: 2%;
+    margin-top: 2%;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.circular-image img {
+    max-width: 100%; 
+    height: auto; 
+}
+
+.feature-card.course-list {
+    height: 100vh;
+    width: 250px;
+}
+
+.feature-card.course-detail {
+    margin-left: 2%;
+    width: 700px;
+    height: 100vh;
+}
+
+.parent-container {
+    margin-left: 2%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.calendar-container {
+    margin-left: 2%;
+    text-align: center;
+    width: 400px;
+}
+
+.calendar th {
+    background-color: #f1f1f1;
+    padding: 10px;
+    border: 1px solid #ddd;
+}
+
+.calendar td {
+    padding: 15px;
+    border: 1px solid #ddd;
+    vertical-align: top;
+}
+
+input[type="submit"] {
+    width: 100%;
+    background-color: gray;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
