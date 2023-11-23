@@ -1,0 +1,60 @@
+
+.parent-container-events{
+    padding: 5%;
+    display: flex;
+}
+
+.left-container-events{
+    margin-left: 10%;
+}
+
+.right-container-events{
+    width: 50%;
+    margin-top: 1%;
+    margin-left: 1%;
+}
+
+.feature-card.events{
+    border: 2px solid #ddd;
+    height: 100vh;
+}
+
+.attendance{
+    font-family: 'Poppins', sans-serif;
+}
+
+input[type="submit"]:hover {
+    background-color: #0069d9;
+}
+
+
+.feature-card.events-detail-title{
+    border: 2px solid #ddd;
+    margin-bottom: 5px;
+}
+
+.feature-card.event-list-title{
+    background-color: #0069d9;
+    color: white;
+}
+
+.feature-card.event-detail{
+    height: 70vh;
+}
+
+.events-list {
+    padding: 0%;
+    margin: 0%;
+    list-style-type: none;
+}
+
+.events-list li:nth-child(odd) {
+    background-color: #D3D3D3;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
