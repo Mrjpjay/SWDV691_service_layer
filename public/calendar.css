@@ -1,54 +1,54 @@
 
-.parent-container-events{
+.parent-container-calendar{
     padding: 5%;
     display: flex;
 }
 
-.left-container-events{
+.left-container-calendar{
     margin-left: 10%;
 }
 
-.right-container-events{
+.right-container-calendar{
     width: 50%;
     margin-top: 1%;
     margin-left: 1%;
 }
 
-.feature-card.events{
+.feature-card.calendar{
     border: 2px solid #ddd;
     height: 100vh;
 }
 
-.attendance{
+.drop-event{
     font-family: 'Poppins', sans-serif;
 }
 
 input[type="submit"]:hover {
-    background-color: #0069d9;
+    background-color: darkred;
 }
 
 
-.feature-card.events-detail-title{
+.feature-card.calendar-detail-title{
     border: 2px solid #ddd;
     margin-bottom: 5px;
 }
 
-.feature-card.event-list-title{
-    background-color: black;
+.feature-card.calendar-list-title{
+    background-color:black;
     color: white;
 }
 
-.feature-card.event-detail{
+.feature-card.calendar-detail{
     height: 70vh;
 }
 
-.events-list {
+.calendar-list {
     padding: 0%;
     margin: 0%;
     list-style-type: none;
 }
 
-.events-list li:nth-child(odd) {
+.calendar-list li:nth-child(odd) {
     background-color: #D3D3D3;
 }
 

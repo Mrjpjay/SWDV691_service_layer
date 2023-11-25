@@ -1,0 +1,73 @@
+
+.parent-container-community{
+    display: flex;
+}
+
+.left-container-community{
+    margin: 5px;
+}
+
+.right-container-community{
+    margin: 5px;
+}
+
+.feature-card.community{
+    border: 2px solid #ddd;
+    height: 100vh;
+}
+
+.enroll{
+    font-family: 'Poppins', sans-serif;
+}
+
+.community-detail{
+    height: 70vh;
+}
+
+.feature-card.community-post-box{
+    height: 100px;
+    width: 1100px;
+    font-family: 'Poppins', sans-serif;
+    text-align: left;
+}
+
+.feature-card.chat-box{
+    height: 500px;
+    margin-bottom: 10px;
+    color: gray;
+}
+
+.community-list {
+    padding: 0%;
+    margin: 0%;
+    list-style-type: none;
+}
+
+.community-list li:nth-child(odd) {
+    background-color: #D3D3D3;
+}
+
+.feature-card {
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #ddd;
+    border-radius: 10px;
+}
+.chat-container{
+    display: flex;
+}
+
+input[type="submit"] {
+    width: 100px;
+    background-color: gray;
+    color: white;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+input[type="submit"]:hover {
+    background-color: #0069d9;
+}

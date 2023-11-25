@@ -21,12 +21,16 @@
 }
 .feature-card.major-title{
     border: 2px solid #ddd;
+    color: white;
     margin-bottom: 5px;
+    background-color: black;
 }
 
 .feature-card.major-detail-title{
     border: 2px solid #ddd;
     margin-bottom: 5px;
+    color: white;
+    background-color: black;
 }
 
 .feature-card.major-detail{
@@ -47,4 +51,8 @@
     padding: 20px;
     border: 2px solid #ddd;
     border-radius: 10px;
+}
+
+input[type="submit"]:hover {
+    background-color:#0069d9;
 }
