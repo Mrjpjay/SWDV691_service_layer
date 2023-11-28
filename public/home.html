@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <title>Maryville Hub Home</title>
@@ -8,61 +9,83 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
     <header>
-      
+
     </header>
 
     <div class="main-containers">
 
         <main class="left-container">
             <section class="features">
-                
-                <a href="profile.html">
-                    <div class="feature-card profile">
-                        <h3>Profile</h3>
-                        <p>Make changes to your profile</p>
-                        <img src="profile.png">
-                    </div>
-                </a>
-                
-                <a href="events.html">
-                    <div class="feature-card events">
-                        <h3>Events</h3>
-                        <p>Stay updated with events</p>
-                        <img src="events.png">
-                    </div>
-                </a>
+
+                <div class="feature-card profile" id="profileCard">
+                    <h3>Profile</h3>
+                    <p>Make changes to your profile</p>
+                    <img src="profile.png">
+                </div>
+
+                <script>
+                    document.getElementById('profileCard').addEventListener('click', function () {
+                        window.location.href = '/Profile';
+                    });
+                </script>
+
+                <div class="feature-card events" id="eventsCard">
+                    <h3>Events</h3>
+                    <p>Stay updated with events</p>
+                    <img src="events.png">
+                </div>
+
+                <script>
+                    document.getElementById('eventsCard').addEventListener('click', function () {
+                        window.location.href = '/EventScreen';
+                    });
+                </script>
+
             </section>
-    
+
             <section class="features_below">
-                <a href="community.html">
-                    <div class="feature-card community">
-                        <h3>Community</h3>
-                        <p>Make changes to your profile</p>
-                        <img src="community.png">
-                    </div>
-                </a>
-                
-                <a href="calendar.html">
-                    <div class="feature-card calendar">
-                        <h3>Calendar</h3>
-                        <p>Stay updated with events</p>
-                        <img src="calendar.png">
-                    </div>
-                </a>
+                <div class="feature-card community" id="communityCard">
+                    <h3>Community</h3>
+                    <p>Make changes to your profile</p>
+                    <img src="community.png">
+                </div>
+
+                <script>
+                    document.getElementById('communityCard').addEventListener('click', function () {
+                        window.location.href = '/CommunityScreen';
+                    });
+                </script>
+
+                <div class="feature-card calendar" id="calendarCard">
+                    <h3>Calendar</h3>
+                    <p>Stay updated with events</p>
+                    <img src="calendar.png">
+                </div>
+
+                <script>
+                    document.getElementById('calendarCard').addEventListener('click', function () {
+                        window.location.href = '/CalendarScreen';
+                    });
+                </script>
             </section>
         </main>
-    
+
         <main class="right-container">
             <section>
-                <a href="course.html">
-                    <div class="feature-card course">
-                        <h3>Courses</h3>
-                        <p>Stay updated with events</p>
-                        <img src="courses.png">
-                    </div>
-                </a>
+                <div class="feature-card course" id="courseCard">
+                    <h3>Courses</h3>
+                    <p>Stay updated with events</p>
+                    <img src="courses.png">
+                </div>
+
+                <script>
+                    document.getElementById('courseCard').addEventListener('click', function () {
+                        window.location.href = '/CourseScreen';
+                    });
+                </script>
             </section>
         </main>
 
@@ -72,4 +95,5 @@
         <p>&copy; 2023 Maryville Hub.</p>
     </footer>
 </body>
+
 </html>

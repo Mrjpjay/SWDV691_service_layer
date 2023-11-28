@@ -1,12 +1,18 @@
 const express = require('express')
 const { connectToDb, getDb } = require('./db')
 const { ObjectId } = require('mongodb')
+const session = require('express-session')
 
 //init and create the app
 const app = express()
 
 // Middleware for parsing JSON data
 app.use(express.json())
+app.use(session({
+    secret: 'thisismysessionsecretkey',
+    saveUninitialized: false,
+    resave: false
+}));
 
 // Middleware for serving static files from the 'public' directory
 app.use(express.static('public'));
@@ -34,9 +40,76 @@ connectToDb((err) => {
 /*routes*/
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/public/login.html');
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+
+    if (req.session.authorized) { 
+        res.sendFile('public/home.html', { root: __dirname });
+    } else {
+        res.sendFile('public/login.html', { root: __dirname });
+    }
 });
 
+app.get('/Profile', (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+
+    if (req.session.authorized) {
+        res.sendFile('public/profile.html', { root: __dirname });
+    } else {
+        res.sendFile('public/login.html', { root: __dirname });
+    }
+})
+
+app.get('/EventScreen', (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+
+    if (req.session.authorized) {
+        res.sendFile('public/events.html', { root: __dirname });
+    } else {
+        res.sendFile('public/login.html', { root: __dirname });
+    }
+})
+
+app.get('/CommunityScreen', (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    
+    if (req.session.authorized) {
+        res.sendFile('public/community.html', { root: __dirname });
+    } else {
+        res.sendFile('public/login.html', { root: __dirname });
+    }
+})
+
+app.get('/CalendarScreen', (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    
+    if (req.session.authorized) {
+        res.sendFile('public/calendar.html', { root: __dirname });
+    } else {
+        res.sendFile('public/login.html', { root: __dirname });
+    }
+})
+
+app.get('/CourseScreen', (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+    
+    if (req.session.authorized) {
+        res.sendFile('public/course.html', { root: __dirname });
+    } else {
+        res.sendFile('public/login.html', { root: __dirname });
+    }
+})
 
 //get all users
 app.get('/User', (req, res) => {
@@ -108,6 +181,21 @@ app.get('/Course', (req, res) => {
         })
 })
 
+//logout
+app.post('/Logout', (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+        
+    req.session.destroy(err => {
+        if (!err) {
+            res.sendFile('public/login.html', { root: __dirname });
+        } else {
+            res.status(500).json({ error: 'something went wrong' })
+        }
+    })
+})
+
 //get user by id
 app.post('/Login', (req, res) => {
     const user = req.body
@@ -128,10 +216,12 @@ app.post('/Login', (req, res) => {
     }
 
     db.collection('User')
-        .findOne({"user.username": insert.user.username, "user.password": insert.user.password})
+        .findOne({ "user.username": insert.user.username, "user.password": insert.user.password })
         .then(response => {
-            if(response){
-                res.redirect('/home.html')
+            if (response) {
+                req.session.user = insert.user;
+                req.session.authorized = true;
+                res.redirect('/home.html');
             } else {
                 res.status(404).json({ error: 'Username or password is incorrect' });
             }
@@ -184,6 +274,8 @@ app.post('/Register', (req, res) => {
     db.collection('User')
         .insertOne(insert)
         .then(result => {
+            req.session.user = insert.user;
+            req.session.authorized = true;
             res.redirect('/home.html')
         })
         .catch(err => {

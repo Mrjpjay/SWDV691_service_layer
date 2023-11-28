@@ -17,6 +17,7 @@ a :hover{
 .main-containers{
     display: flex;
     justify-content: space-between;
+    background: url(portrait.jpg) no-repeat;
 }
 
 .left-container {
@@ -55,6 +56,7 @@ a :hover{
     border-radius: 10px;
     width: 250px;
     height: 250px;
+    background-color: white;
 }
 
 .feature-card.profile{
@@ -105,4 +107,20 @@ footer {
     text-align: center;
     background-color: #f1f1f1;
     padding: 10px 20px;
+}
+
+#profileCard {
+    cursor: pointer;
+}
+#eventsCard{
+    cursor: pointer;
+}
+#communityCard{
+    cursor: pointer;
+}
+#calendarCard{
+    cursor: pointer;
+}
+#courseCard{
+    cursor: pointer;
 }
