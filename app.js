@@ -2,9 +2,14 @@ const express = require('express')
 const { connectToDb, getDb } = require('./db')
 const { ObjectId } = require('mongodb')
 const session = require('express-session')
+const path = require('path');
 
 //init and create the app
 const app = express()
+
+//Embedded JavaScript templating
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 // Middleware for parsing JSON data
 app.use(express.json())
@@ -44,7 +49,7 @@ app.get('/', (req, res) => {
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
 
-    if (req.session.authorized) { 
+    if (req.session.authorized) {
         res.sendFile('public/home.html', { root: __dirname });
     } else {
         res.sendFile('public/login.html', { root: __dirname });
@@ -79,7 +84,7 @@ app.get('/CommunityScreen', (req, res) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
-    
+
     if (req.session.authorized) {
         res.sendFile('public/community.html', { root: __dirname });
     } else {
@@ -91,7 +96,7 @@ app.get('/CalendarScreen', (req, res) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
-    
+
     if (req.session.authorized) {
         res.sendFile('public/calendar.html', { root: __dirname });
     } else {
@@ -103,11 +108,23 @@ app.get('/CourseScreen', (req, res) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
-    
+
     if (req.session.authorized) {
-        res.sendFile('public/course.html', { root: __dirname });
+        res.render('course');
     } else {
         res.sendFile('public/login.html', { root: __dirname });
+    }
+})
+
+app.get('/singUpScreen', (req, res) => {
+    res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.set('Pragma', 'no-cache');
+    res.set('Expires', '0');
+
+    if (req.session.authorized) {
+        res.sendFile('public/home.html', { root: __dirname });
+    } else {
+        res.sendFile('public/singup.html', { root: __dirname });
     }
 })
 
@@ -166,19 +183,80 @@ app.patch('/Event/:id', (req, res) => {
         })
 })
 
-//get all courses
+//get user course details
 app.get('/Course', (req, res) => {
-    let courses = []
+    const major = req.session.user.major
+    const username = req.session.user.username
 
     db.collection('Course')
-        .find()
-        .forEach(course => courses.push(course))
-        .then(() => {
-            res.status(200).json(courses)
+        .findOne({ "major.title": major })
+        .then(object => {
+            res.json({
+                courses: object.major.courses,
+                username: username
+            })
         })
-        .catch(() => {
+        .catch((err) => {
+            console.log(major)
             res.status(500).json({ error: 'Could not fetch the courses' })
         })
+})
+
+//remove from course
+app.get('/CourseRemoval', (req, res) => {
+    const major = req.session.user.major
+    const username = req.session.user.username
+    const courseTitle = req.query.course
+
+    console.log(courseTitle)
+    // Update the course in the database
+    db.collection('Course')
+        .updateOne(
+            {
+                "major.title": major,
+                "major.courses": { $elemMatch: { title: courseTitle, enrolledStudents: username } }
+            },
+            { $pull: { "major.courses.$.enrolledStudents": username } }
+        ).then(result => {
+            if (result.modifiedCount === 0) {
+                res.status(404).json({ error: 'User not found in the course' });
+            } else {
+                console.log("user removed")
+                res.json({ message: 'User removed from the course successfully' });
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not update the course' });
+        });
+})
+
+//add student to a course
+app.get('/CourseAddition', (req, res) => {
+    const major = req.session.user.major
+    const username = req.session.user.username
+    const courseTitle = req.query.course
+
+    // Update the course in the database
+    db.collection('Course')
+        .updateOne(
+            {
+                "major.title": major,
+                "major.courses.title": courseTitle
+            },
+            { $addToSet: { "major.courses.$.enrolledStudents": username } }
+        ).then(result => {
+            if (result.modifiedCount === 0) {
+                res.status(404).json({ error: 'User not added to the course' });
+            } else {
+                console.log("user added")
+                res.json({ message: 'User added to the course successfully' });
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not update the course' });
+        });
 })
 
 //logout
@@ -186,7 +264,7 @@ app.post('/Logout', (req, res) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
-        
+
     req.session.destroy(err => {
         if (!err) {
             res.sendFile('public/login.html', { root: __dirname });
@@ -202,24 +280,11 @@ app.post('/Login', (req, res) => {
     const username = user.username
     const password = user.password
 
-    const insert = {
-        user: {
-            username: username,
-            email: "",
-            password: password,
-            profilePicture: "",
-            major: "",
-            enrolledCourses: [],
-            communityInteractions: [],
-            calendarEvents: []
-        }
-    }
-
     db.collection('User')
-        .findOne({ "user.username": insert.user.username, "user.password": insert.user.password })
+        .findOne({ "user.username": username, "user.password": password })
         .then(response => {
             if (response) {
-                req.session.user = insert.user;
+                req.session.user = response.user;
                 req.session.authorized = true;
                 res.redirect('/home.html');
             } else {

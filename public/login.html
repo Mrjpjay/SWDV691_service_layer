@@ -23,9 +23,17 @@
                 <form action="/Login" method="post" id="loginForm">
                     <input type="text" id="username" name="username" placeholder="Username" required>
                     <input type="password" id="password" name="password" placeholder="Password" required>
-                    <a href="singup.html">
+
+                    <div id="singUpDiv">
                         <h3 id>Create an account</h3>
-                    </a>
+                    </div>
+
+                    <script>
+                        document.getElementById('singUpDiv').addEventListener('click', function () {
+                            window.location.href = '/singUpScreen';
+                        });
+                    </script>
+
                     <input type="submit" id="loginSubmit" value="Login">
                 </form>
             </div>

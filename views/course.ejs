@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Maryville Hub - Courses</title>
+    <link rel="stylesheet" type="text/css" href="profile.css">
+    <link rel="stylesheet" type="text/css" href="course.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="parent-container-course">
+        <div class="left-container-course">
+            <div class="feature-card major-title">
+                <h3>Available courses for you</h3>
+            </div>
+            <div class="feature-card majors">
+                <ul id="courses-list">
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="right-container-course">
+            <div class="feature-card major-detail-title">
+                <h3>Course details</h3>
+            </div>
+            <div class="feature-card major-detail">
+                <h3 id="course-detail-title"> Course detail</h3>
+                <h5 id="course-detail"></h5>
+            </div>
+            <input type="submit" id="enroll" value="Enroll in the course" class="enroll">
+        </div>
+    </div>
+
+    <script>
+        var button = document.getElementById('enroll');
+        button.style.display = 'none'
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/Course')
+                .then(response => response.json())
+                .then(data => {
+                    const username = data.username
+                    const list = document.getElementById('courses-list');
+                    const courses = data.courses
+
+                    courses.forEach((course, index) => {
+
+                        // Create an <li> element for each course
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<strong>${course.title}`;
+                        listItem.onclick = () => handleCourseClick(course, username, index, courses);
+
+                        // Append the <li> to the <ul>
+                        list.appendChild(listItem);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                });
+        });
+    </script>
+
+    <script>
+        function handleCourseClick(course, username, index, courses) {
+            //remove course click
+            var button = document.getElementById('enroll');
+            button.style.display = '';
+
+             // Remove any existing event listener from the button
+            if (button.clickHandler) {
+                button.removeEventListener('click', button.clickHandler);
+            }
+
+            // Define a new event listener with the current course context
+            button.clickHandler = (function (currentCourse) {
+                return function () {
+                    if (course.enrolledStudents.includes(username)) {
+                        removeFromCourse(course, username);
+
+                    } else if(!course.enrolledStudents.includes(username)){
+                        courseAddition(course, username);
+                    }
+                };
+            })(course);
+
+            // Add the new event listener to the button
+            button.addEventListener('click', button.clickHandler);
+
+            const courseDetailTitle = document.getElementById('course-detail-title');
+            courseDetailTitle.textContent = `${course.title} details`;
+
+            const courseDetail = document.getElementById('course-detail');
+            courseDetail.textContent = `${course.description}`;
+            var button = document.getElementById('enroll');
+
+            if (course.enrolledStudents.includes(username)) {
+                button.style.backgroundColor = 'darkred';
+                button.value = 'Remove course';
+
+            } else {
+                button.style.backgroundColor = 'cadetblue';
+                button.value = 'Enroll in the course';
+            }
+        }
+    </script>
+
+    <script>
+        function removeFromCourse(course, username) {
+            var encodedCourseTitle = encodeURIComponent(course.title);
+            var url = '/CourseRemoval?course=' + encodedCourseTitle;
+            fetch(url, {
+                method: 'GET',
+            })
+                .then(data => {
+
+                    var button = document.getElementById('enroll');
+                    button.style.backgroundColor = 'cadetblue';
+                    button.value = 'Enroll in the course';
+
+                    let index = course.enrolledStudents.indexOf(username);
+                    if (index > -1) {
+                        course.enrolledStudents.splice(index, 1);
+                    }
+
+                    return data.text()
+                })
+                .catch((error) => {
+                    console.error('jpr Could not send course title:', error);
+                });
+        }
+    </script>
+
+    <script>
+        function courseAddition(course, username) {
+            var encodedCourseTitle = encodeURIComponent(course.title);
+            var url = '/courseAddition?course=' + encodedCourseTitle;
+            fetch(url, {
+                method: 'GET',
+            })
+                .then(data => {
+
+                    var button = document.getElementById('enroll');
+                    button.style.backgroundColor = 'darkred';
+                    button.value = 'Remove course';
+
+                    course.enrolledStudents.push(username);
+
+                    return data.text()
+                })
+                .catch((error) => {
+                    console.error('jpr Could not send course title:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>

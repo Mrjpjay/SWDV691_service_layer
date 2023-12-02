@@ -1,6 +1,7 @@
 
 .parent-container-course{
     display: flex;
+    background: url(portrait.jpg) no-repeat;
 }
 
 .left-container-course{
@@ -14,11 +15,14 @@
 .feature-card.majors{
     border: 2px solid #ddd;
     height: 100vh;
+    background-color: white;
 }
 
 .enroll{
     font-family: 'Poppins', sans-serif;
+    color: gray;
 }
+
 .feature-card.major-title{
     border: 2px solid #ddd;
     color: white;
@@ -35,6 +39,8 @@
 
 .feature-card.major-detail{
     height: 70vh;
+    background-color: white;
+    width: 1200px;
 }
 .major-list {
     padding: 0%;
@@ -55,4 +61,12 @@
 
 input[type="submit"]:hover {
     background-color:#0069d9;
+}
+
+#courses-list li {
+    cursor: pointer;
+}
+
+#courses-list li:hover{
+    color: #0069d9;
 }
