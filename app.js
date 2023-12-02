@@ -208,7 +208,6 @@ app.get('/CourseRemoval', (req, res) => {
     const username = req.session.user.username
     const courseTitle = req.query.course
 
-    console.log(courseTitle)
     // Update the course in the database
     db.collection('Course')
         .updateOne(
