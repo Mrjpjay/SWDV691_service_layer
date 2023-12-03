@@ -74,7 +74,7 @@ app.get('/EventScreen', (req, res) => {
     res.set('Expires', '0');
 
     if (req.session.authorized) {
-        res.sendFile('public/events.html', { root: __dirname });
+        res.render('events');
     } else {
         res.sendFile('public/login.html', { root: __dirname });
     }
@@ -146,14 +146,19 @@ app.get('/User', (req, res) => {
 //get all events
 app.get('/Event', (req, res) => {
     let events = []
+    const username = req.session.user.username
 
     db.collection('Event')
         .find()
         .forEach(event => events.push(event))
         .then(() => {
-            res.status(200).json(events)
+            res.json({
+                username: username,
+                events: events
+            })
         })
-        .catch(() => {
+        .catch(err => {
+            console.log(err)
             res.status(500).json({ error: 'Could not fetch the events' })
         })
 })
@@ -202,6 +207,32 @@ app.get('/Course', (req, res) => {
         })
 })
 
+//remove from event
+app.get('/EventRemoval', (req, res) => {
+    const username = req.session.user.username
+    const eventTitle = req.query.title
+
+    // Update the course in the database
+    db.collection('Event')
+        .updateOne(
+            {
+                "event.title": eventTitle
+            },
+            { $pull: { "event.attendees": username } }
+        ).then(result => {
+            if (result.modifiedCount === 0) {
+                res.status(404).json({ error: 'Student not found in the event' });
+            } else {
+                console.log("Student removed")
+                res.json({ message: 'Student removed from the event successfully' });
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not update the event' });
+        });
+})
+
 //remove from course
 app.get('/CourseRemoval', (req, res) => {
     const major = req.session.user.major
@@ -222,6 +253,32 @@ app.get('/CourseRemoval', (req, res) => {
             } else {
                 console.log("user removed")
                 res.json({ message: 'User removed from the course successfully' });
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not update the course' });
+        });
+})
+
+//add student to an event
+app.get('/EventAddition', (req, res) => {
+    const username = req.session.user.username
+    const eventTitle = req.query.title
+
+    // Update the course in the database
+    db.collection('Event')
+        .updateOne(
+            {
+                "event.title": eventTitle
+            },
+            { $addToSet: { "event.attendees": username } }
+        ).then(result => {
+            if (result.modifiedCount === 0) {
+                res.status(404).json({ error: 'Student not added to the event' });
+            } else {
+                console.log("student added")
+                res.json({ message: 'Student added to the event successfully' });
             }
         })
         .catch((err) => {

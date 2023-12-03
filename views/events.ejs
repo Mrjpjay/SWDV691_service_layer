@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Maryville Hub - Events</title>
+    <link rel="stylesheet" type="text/css" href="profile.css">
+    <link rel="stylesheet" type="text/css" href="events.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="parent-container-events">
+        <div class="left-container-events">
+            <h3 class="feature-card event-list-title">Events open to all for attendance</h3>
+            <div class="feature-card events-list">
+                <ul id="event-list"></ul>
+            </div>
+        </div>
+
+        <div class="right-container-events">
+            <div class="feature-card event-detail">
+                <h3 id="event-detail-title">Select an event</h3>
+                <h5 id="event-detail"></h5>
+            </div>
+            <input type="submit" id="attendance" value="Submit attendance" class="attendance">
+        </div>
+    </div>
+
+    <script>
+        var button = document.getElementById('attendance');
+        button.style.display = 'none'
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/Event')
+                .then(response => response.json())
+                .then(data => {
+                    const username = data.username
+                    const list = document.getElementById('event-list');
+                    const events = data.events
+
+                    events.forEach((event, index) => {
+                        // Create an <li> element for each event
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<strong>${event.event.title}`;
+                        listItem.onclick = () => handleEventClick(event, username, index, events);
+
+                        // Append the <li> to the <ul>
+                        list.appendChild(listItem);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                });
+        });
+    </script>
+
+<script>
+    function handleEventClick(event, username, index, events) {
+        //remove event click
+        var button = document.getElementById('attendance');
+        button.style.display = '';
+
+         // Remove any existing event listener from the button
+        if (button.clickHandler) {
+            button.removeEventListener('click', button.clickHandler);
+        }
+
+        // Define a new event listener with the current event context
+        button.clickHandler = (function (currentEvent) {
+            return function () {
+                if (event.event.attendees.includes(username)) {
+                    removeFromEvent(event, username);
+
+                } else if(!event.event.attendees.includes(username)){
+                    eventAddition(event, username);
+                }
+            };
+        })(event);
+
+        // Add the new event listener to the button
+        button.addEventListener('click', button.clickHandler);
+
+        const eventDetailTitle = document.getElementById('event-detail-title');
+        eventDetailTitle.textContent = `${event.event.title} details`;
+
+        const eventDetail = document.getElementById('event-detail');
+        eventDetail.textContent = `${event.event.description}`;
+
+        if (event.event.attendees.includes(username)) {
+            button.style.backgroundColor = 'darkred';
+            button.value = 'Remove attendance';
+
+        } else {
+            button.style.backgroundColor = 'cadetblue';
+            button.value = 'Submit attendance';
+        }
+    }
+</script>
+
+<script>
+    function removeFromEvent(event, username) {
+        var encodedEventTitle = encodeURIComponent(event.event.title);
+        var url = '/EventRemoval?title=' + encodedEventTitle;
+        fetch(url, {
+            method: 'GET',
+        })
+            .then(data => {
+
+                var button = document.getElementById('attendance');
+                button.style.backgroundColor = 'cadetblue';
+                button.value = 'Submit attendance';
+
+                let index = event.event.attendees.indexOf(username);
+                if (index > -1) {
+                    event.event.attendees.splice(index, 1);
+                }
+
+                return data.text()
+            })
+            .catch((error) => {
+                console.error('Could not send event title:', error);
+            });
+    }
+</script>
+
+<script>
+    function eventAddition(event, username) {
+        var eventTitle = encodeURIComponent(event.event.title);
+        var url = '/EventAddition?title=' + eventTitle;
+        fetch(url, {
+            method: 'GET',
+        })
+            .then(data => {
+
+                var button = document.getElementById('attendance');
+                button.style.backgroundColor = 'darkred';
+                button.value = 'Remove attendance';
+
+                event.event.attendees.push(username);
+
+                return data.text()
+            })
+            .catch((error) => {
+                console.error('Could not send event title:', error);
+            });
+    }
+</script>
+
+</body>
+
+</html>

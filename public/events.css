@@ -2,6 +2,7 @@
 .parent-container-events{
     padding: 5%;
     display: flex;
+    background: url(portrait.jpg) no-repeat;
 }
 
 .left-container-events{
@@ -33,6 +34,10 @@ input[type="submit"]:hover {
     margin-bottom: 5px;
 }
 
+.feature-card.events-list{
+    background-color: white;
+}
+
 .feature-card.event-list-title{
     background-color: black;
     color: white;
@@ -40,6 +45,7 @@ input[type="submit"]:hover {
 
 .feature-card.event-detail{
     height: 70vh;
+    background-color: white;
 }
 
 .events-list {
@@ -57,4 +63,13 @@ input[type="submit"]:hover {
     padding: 20px;
     border: 2px solid #ddd;
     border-radius: 10px;
+}
+
+#event-list li {
+    cursor: pointer;
+    margin-bottom: 5px;
+}
+
+#event-list li:hover{
+    color: #0069d9;
 }
