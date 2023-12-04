@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Maryville Hub - Calendar</title>
+    <link rel="stylesheet" type="text/css" href="profile.css">
+    <link rel="stylesheet" type="text/css" href="calendar.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="parent-container-calendar">
+        <div class="left-container-calendar">
+            <h3 class="feature-card calendar-list-title">Your scheduled events</h3>
+            <div class="feature-card calendar-list">
+                <ul id="calendar-list">
+
+                </ul>
+            </div>
+        </div>
+
+        <div class="right-container-calendar">
+            <div class="feature-card calendar-detail">
+                <h3 id="calendar-event-title">Select an event</h3>
+                <h5 id="calendar-event-detail"></h5>
+            </div>
+            <input type="submit" id="drop-event" value="Drop event" class="drop-event">
+        </div>
+    </div>
+
+    <script>
+        var button = document.getElementById('drop-event');
+        button.style.display = 'none'
+
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/EventStudent')
+                .then(response => response.json())
+                .then(data => {
+                    const username = data.username
+                    const list = document.getElementById('calendar-list');
+                    const events = data.events
+
+                    if (events.length === 0) {
+                        const calendarEventTitle = document.getElementById('calendar-event-title');
+                        calendarEventTitle.textContent = `You have no events listed.`;
+                    }
+                    console.log(events)
+                    events.forEach((event, index) => {
+
+                        // Create an <li> element for each event
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<strong>${event.event.title}`;
+                        listItem.onclick = () => handleEventsClick(event, username, index, events);
+
+                        // Append the <li> to the <ul>
+                        list.appendChild(listItem);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error fetching events:', error);
+                });
+        });
+    </script>
+
+    <script>
+        function handleEventsClick(event, username, index, events) {
+            //remove event click
+            var button = document.getElementById('drop-event');
+            button.style.display = '';
+
+            // Remove any existing event listener from the button
+            if (button.clickHandler) {
+                button.removeEventListener('click', button.clickHandler);
+            }
+
+            // Define a new event listener with the current event context
+            button.clickHandler = (function (currentEvent) {
+                return function () {
+                    removeFromCalendar(event, username);
+                };
+            })(event);
+
+            // Add the new event listener to the button
+            button.addEventListener('click', button.clickHandler);
+
+            const calendarEventTitle = document.getElementById('calendar-event-title');
+            calendarEventTitle.textContent = `${event.event.title} details`;
+
+            const calendarEventDetail = document.getElementById('calendar-event-detail');
+            calendarEventDetail.textContent = `${event.event.description}`;
+        }
+    </script>
+
+    <script>
+        function removeFromCalendar(event, username) {
+            var encodedEventTitle = encodeURIComponent(event.event.title);
+            var url = '/EventRemoval?title=' + encodedEventTitle;
+            fetch(url, {
+                method: 'GET',
+            })
+                .then(data => {
+
+                    let index = event.event.attendees.indexOf(username);
+                    if (index > -1) {
+                        event.event.attendees.splice(index, 1);
+                    }
+
+                    window.location.reload();
+                    return data.text()
+                })
+                .catch((error) => {
+                    console.error('Could not send event title:', error);
+                });
+        }
+    </script>
+
+</body>
+
+</html>

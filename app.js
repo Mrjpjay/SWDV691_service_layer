@@ -98,7 +98,7 @@ app.get('/CalendarScreen', (req, res) => {
     res.set('Expires', '0');
 
     if (req.session.authorized) {
-        res.sendFile('public/calendar.html', { root: __dirname });
+        res.render('calendar');
     } else {
         res.sendFile('public/login.html', { root: __dirname });
     }
@@ -140,6 +140,26 @@ app.get('/User', (req, res) => {
         })
         .catch(() => {
             res.status(500).json({ error: 'Could not fetch the users' })
+        })
+})
+
+//get all student events
+app.get('/EventStudent', (req, res) => {
+    let events = []
+    const username = req.session.user.username
+
+    db.collection('Event')
+        .find({"event.attendees": username})
+        .forEach(event => events.push(event))
+        .then(() => {
+            res.json({
+                username: username,
+                events: events
+            })
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not fetch the events' })
         })
 })
 

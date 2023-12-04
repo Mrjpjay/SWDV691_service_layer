@@ -2,6 +2,7 @@
 .parent-container-calendar{
     padding: 5%;
     display: flex;
+    background: url(portrait.jpg) no-repeat;
 }
 
 .left-container-calendar{
@@ -40,12 +41,14 @@ input[type="submit"]:hover {
 
 .feature-card.calendar-detail{
     height: 70vh;
+    background-color: white;
 }
 
 .calendar-list {
     padding: 0%;
     margin: 0%;
     list-style-type: none;
+    background-color: white;
 }
 
 .calendar-list li:nth-child(odd) {
@@ -57,4 +60,12 @@ input[type="submit"]:hover {
     padding: 20px;
     border: 2px solid #ddd;
     border-radius: 10px;
+}
+
+#calendar-list li {
+    cursor: pointer;
+}
+
+#calendar-list li:hover{
+    color: #0069d9;
 }
