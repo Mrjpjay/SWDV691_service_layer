@@ -56,13 +56,13 @@ app.get('/', (req, res) => {
     }
 });
 
-app.get('/Profile', (req, res) => {
+app.get('/ProfileScreen', (req, res) => {
     res.set('Cache-Control', 'no-cache, no-store, must-revalidate');
     res.set('Pragma', 'no-cache');
     res.set('Expires', '0');
 
     if (req.session.authorized) {
-        res.sendFile('public/profile.html', { root: __dirname });
+        res.render('profile');
     } else {
         res.sendFile('public/login.html', { root: __dirname });
     }
@@ -128,21 +128,6 @@ app.get('/singUpScreen', (req, res) => {
     }
 })
 
-//get all users
-app.get('/User', (req, res) => {
-    let users = []
-
-    db.collection('User')
-        .find()
-        .forEach(user => users.push(user))
-        .then(() => {
-            res.status(200).json(users)
-        })
-        .catch(() => {
-            res.status(500).json({ error: 'Could not fetch the users' })
-        })
-})
-
 //get all student events
 app.get('/EventStudent', (req, res) => {
     let events = []
@@ -205,6 +190,30 @@ app.patch('/Event/:id', (req, res) => {
         })
         .catch(err => {
             res.status(500).json({ error: 'Could not update the event' })
+        })
+})
+
+//get all course 
+app.get('/AllCourses', (req, res) => {
+    let courses = []
+    const username = req.session.user.username
+    const major = req.session.user.major
+
+    db.collection('Course')
+        .find({ 
+            "major.title": major,
+            "major.courses.enrolledStudents": username 
+        })
+        .forEach(course => courses.push(course.major.courses))
+        .then(() => {
+            res.json({
+                courses: courses,
+                username: username
+            })
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not fetch the courses' })
         })
 })
 
@@ -278,6 +287,47 @@ app.get('/CourseRemoval', (req, res) => {
         .catch((err) => {
             console.log(err)
             res.status(500).json({ error: 'Could not update the course' });
+        });
+})
+
+//get bio
+app.get('/getBio', (req, res) => {
+    const username = req.session.user.username
+
+    db.collection('User')
+        .findOne({ "user.username": username})
+        .then(user => {
+            res.json({bio: user.user.bio})
+        })
+        .catch(err => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not get bio' })
+        })
+})
+
+//update bio
+app.get('/updateBio', (req, res) => {
+    const username = req.session.user.username
+    const bio = req.query.bio
+
+    // Update the course in the database
+    db.collection('User')
+        .updateOne(
+            {
+                "user.username": username
+            },
+            { $set: { "user.bio": bio } }
+        ).then(result => {
+            if (result.modifiedCount === 0) {
+                res.status(404).json({ error: 'Bio NOT updated' });
+            } else {
+                console.log("bio updated succesfully")
+                res.json({ message: 'bio updated succesfully' });
+            }
+        })
+        .catch((err) => {
+            console.log(err)
+            res.status(500).json({ error: 'Could not update bio' });
         });
 })
 

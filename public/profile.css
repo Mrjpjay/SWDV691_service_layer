@@ -1,9 +1,10 @@
 body {
     font-family: 'Poppins', sans-serif;
+    background: url(portrait.jpg) no-repeat;
 }
 
 h5 {
-    color: gray;
+    color: black;
 }
 
 .bio {
@@ -34,6 +35,7 @@ ul li:nth-child(odd) {
 .edit-btn {
     object-fit: cover;
     align-self: center;
+    cursor: pointer;
 }
 
 .right-container {
@@ -91,6 +93,9 @@ ul li:nth-child(odd) {
     justify-content: space-between;
 }
 
+.profile-course-detail{
+    color: grey;
+}
 .calendar-container {
     margin-left: 2%;
     text-align: center;
@@ -107,6 +112,7 @@ ul li:nth-child(odd) {
     padding: 15px;
     border: 1px solid #ddd;
     vertical-align: top;
+    background-color: white;
 }
 
 input[type="submit"] {
@@ -118,4 +124,46 @@ input[type="submit"] {
     border: none;
     border-radius: 4px;
     cursor: pointer;
+}
+
+#logout:hover{
+    background-color: #505050;
+}
+
+#profile-course-list li {
+    cursor: pointer;
+}
+
+#profile-course-list li:hover{
+    color: #0069d9;
+}
+
+#saveBtn {
+    width: 100%;
+    background-color: #0069d9;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#saveBtn:hover{
+    background-color: #0056b3;
+}
+
+#cancelBtn {
+    width: 100%;
+    background-color: gray;
+    color: white;
+    border: none;
+    margin-left: 100px;
+    margin-right: 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+#cancelBtn:hover{
+    background-color: #505050;
 }

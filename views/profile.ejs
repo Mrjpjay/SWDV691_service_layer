@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Maryville Hub - Profile</title>
+    <link rel="stylesheet" type="text/css" href="profile.css">
+    <link rel="stylesheet" type="text/css" href="home.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+    <div class="image-editor">
+        <div class="circular-image">
+            <img src="emptyphoto.png">
+        </div>
+
+        <img class="edit-image" src="editbio.png">
+    </div>
+    <div class="parent-container">
+        <div class="left-container-p">
+            <div class="feature-card course-list">
+                <h3 id="selected-coure-title">Your selected courses</h3>
+                <ul id="profile-course-list">
+                </ul>
+            </div>
+
+            <div class="feature-card course-detail">
+                <h3>Your selected course details</h3>
+                <h5 id="profile-course-detail" class="profile-course-detail"></h5>
+            </div>
+
+        </div>
+
+        <div class="right-container">
+            <div class="calendar-container">
+                <table class="calendar">
+                    <thead>
+                        <tr>
+                            <th>Sun</th>
+                            <th>Mon</th>
+                            <th>Tue</th>
+                            <th>Wed</th>
+                            <th>Thu</th>
+                            <th>Fri</th>
+                            <th>Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>2</td>
+                            <td>3</td>
+                            <td>4</td>
+                            <td>5</td>
+                            <td>6</td>
+                            <td>8</td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td>10</td>
+                            <td>11</td>
+                            <td>12</td>
+                            <td>13</td>
+                            <td>14</td>
+                            <td>15</td>
+                        </tr>
+                        <tr>
+                            <td>16</td>
+                            <td>17</td>
+                            <td>18</td>
+                            <td>19</td>
+                            <td>20</td>
+                            <td>21</td>
+                            <td>22</td>
+                        </tr>
+                        <tr>
+                            <td>23</td>
+                            <td>24</td>
+                            <td>25</td>
+                            <td>26</td>
+                            <td>27</td>
+                            <td>28</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bio">
+                <div class="bio-section">
+                    <H3>Biography</H3>
+                    <img id="edit-btn" class="edit-btn" src="editbio.png">
+                    <input type="submit" value="Cancel" class="cancelBtn" id="cancelBtn" style="display:none;"></input>
+                    <input type="submit" value="Save" class="saveBtn" id="saveBtn" style="display:none;"></input>
+                </div>
+                <textarea id="biography" name="biography" rows="16" cols="55"></textarea>
+            </div>
+
+            <form action="/Logout" method="post">
+                <input type="submit" id="logout" value="Logout" class="logout">
+            </form>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('biography').readOnly = true;
+
+            document.getElementById('edit-btn').addEventListener('click', function () {
+                document.getElementById('saveBtn').style.display = 'block';
+                document.getElementById('cancelBtn').style.display = 'block';
+                document.getElementById('biography').readOnly = false;
+            });
+
+            document.getElementById('cancelBtn').addEventListener('click', function () {
+                document.getElementById('saveBtn').style.display = 'none';
+                document.getElementById('cancelBtn').style.display = 'none';
+                document.getElementById('biography').readOnly = true;
+            });
+
+            document.getElementById('saveBtn').addEventListener('click', function () {
+                document.getElementById('saveBtn').style.display = 'none';
+                document.getElementById('cancelBtn').style.display = 'none';
+                document.getElementById('biography').readOnly = true;
+
+                updateBio()
+            });
+
+            fetch('/AllCourses')
+                .then(response => response.json())
+                .then(data => {
+                    const username = data.username
+                    const list = document.getElementById('profile-course-list');
+                    const courses = data.courses
+
+                    if (courses.length === 0) {
+                        const courseEventTitle = document.getElementById('selected-coure-title');
+                        courseEventTitle.textContent = `You dont have any courses added.`;
+                    }
+                    courses.forEach((object) => {
+                        object.forEach((course) => {
+                            if (course.enrolledStudents.includes(username)) {
+                                const listItem = document.createElement('li');
+                                listItem.innerHTML = `<strong>${course.title}`;
+                                listItem.onclick = () => handleCourseClick(course);
+
+                                list.appendChild(listItem);
+                            }
+                        })
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                });
+
+            getBio()
+        });
+    </script>
+
+    <script>
+        function getBio() {
+            fetch('/getBio')
+                .then(response => response.json())
+                .then(data => {
+                    const bio = data.bio
+                    if (bio === '') {
+                        document.getElementById('biography').textContent = "Bring Your Profile to Life: Add Your Bio Now"
+                        return
+                    }
+                    document.getElementById('biography').textContent = bio
+                }).catch(error => {
+                    console.log(error)
+                    console.error('Error fetching bio:', error);
+                });
+        }
+    </script>
+
+    <script>
+        function updateBio() {
+            var bio = document.getElementById('biography').value;
+            var bioText = encodeURIComponent(bio);
+            var url = '/updateBio?bio=' + bioText;
+            fetch(url, {
+                method: 'GET',
+            })
+                .then(data => {
+                    return data.text()
+                })
+                .catch((error) => {
+                    console.error('Could save bio:', error);
+                });
+        }
+    </script>
+
+    <script>
+        function handleCourseClick(course) {
+            const calendarEventDetail = document.getElementById('profile-course-detail');
+            calendarEventDetail.textContent = `${course.description}`;
+        }
+    </script>
+
+</body>
+
+</html>
