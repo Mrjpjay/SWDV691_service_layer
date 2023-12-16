@@ -86,7 +86,7 @@ app.get('/CommunityScreen', (req, res) => {
     res.set('Expires', '0');
 
     if (req.session.authorized) {
-        res.sendFile('public/community.html', { root: __dirname });
+        res.render('community');
     } else {
         res.sendFile('public/login.html', { root: __dirname });
     }
@@ -215,6 +215,46 @@ app.get('/AllCourses', (req, res) => {
             console.log(err)
             res.status(500).json({ error: 'Could not fetch the courses' })
         })
+})
+
+//get comunnity forum comments
+app.get('/Community', (req, res) => {
+    const course = req.query.course
+
+    db.collection('community')
+    .aggregate([
+
+        // Match documents that have any comment for the specified course
+        { $match: { "community.comments.course": course } },
+
+        // Project the document with a filtered comments array
+        { $project: {
+            community: {
+                major: "$community.major",
+                title: "$community.title",
+                comments: {
+                    $filter: {
+                        input: "$community.comments",
+                        as: "comment",
+                        cond: { $eq: ["$$comment.course", course] }
+                    }
+                }
+            }
+        }}
+    ])
+    .toArray()
+    .then(results => {    
+        if (results.length > 0) {
+            res.json({ comments: results[0].community.comments });
+        } else {
+            res.json({ comments: [] });
+        }
+    })
+    .catch(err => {
+        console.error(err);
+        res.status(500).json({ error: 'Error retrieving comments' });
+    });
+
 })
 
 //get user course details
@@ -433,6 +473,27 @@ app.get('/community/:id', (req, res) => {
             res.status(500).json({ error: 'Could not fetch the community' })
         })
 })
+
+//post a comment
+app.post('/AddComment', (req, res) =>{
+    
+    let newComment = req.body
+    let major = req.session.user.major
+
+    db.collection('community')
+        .updateOne(
+            {"community.major": major},
+            {$push: {"community.comments": newComment}}
+        )
+        .then(result =>{
+            res.status(200).json(result);
+        })
+        .catch(err =>{
+            console.log(err)
+            res.status(500).json({error: 'Error adding comment '+err})
+        });
+});
+
 
 //create user
 app.post('/Register', (req, res) => {

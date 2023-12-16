@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Maryville Hub - Community</title>
+    <link rel="stylesheet" type="text/css" href="profile.css">
+    <link rel="stylesheet" type="text/css" href="community.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@200;400;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <div class="parent-container-community">
+        <div class="left-container-community">
+            <div class="feature-card community">
+                <h3 id="community-coursetitle">Course discussions</h3>
+                <ul id="community-course-list"></ul>
+            </div>
+        </div>
+
+        <div class="right-container-community">
+            <div class="community-detail">
+                <h3 id="selection" class="selection">Select a course discussion</h3>
+                <div id="chat-box-container" class="feature-card chat-box">
+                    <div class="single-comment">
+                        <img class="profiel-empty" id="profile-empty">
+                        <div class="name-comment-div" id="name-comment-div">
+                            <h6 id="comment-owner" class="comment-owner"></h6>
+                            <h4 id="commentChat" class="comment"></h4>
+                        </div>
+                    </div>
+                </div>
+                <div class="chat-container">
+                    <input id="text-comment" type="text" class="feature-card community-post-box"
+                        placeholder="Ask anything...">
+                </div>
+                <input type="submit" id="post" value="Post" class="post">
+            </div>
+        </div>
+    </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('/Course')
+                .then(response => response.json())
+                .then(data => {
+                    const username = data.username
+                    const list = document.getElementById('community-course-list');
+                    const courses = data.courses
+
+                    courses.forEach((course, index) => {
+
+                        // Create an <li> element for each course
+                        const listItem = document.createElement('li');
+                        listItem.innerHTML = `<strong>${course.title}`;
+                        listItem.onclick = () => handleCourseClick(course, username, courses);
+
+                        // Append the <li> to the <ul>
+                        list.appendChild(listItem);
+                    });
+
+                })
+                .catch(error => {
+                    console.error('Error fetching courses:', error);
+                });
+        });
+    </script>
+
+    <script>
+        function handleCourseClick(course, username, courses) {
+            const selection = document.getElementById('selection');
+            selection.textContent = course.title + ' discussion'
+
+            var courseTitle = encodeURIComponent(course.title);
+            var url = '/Community?course=' + courseTitle;
+            fetch(url, {
+                method: 'GET',
+            })
+                .then(response => response.json())
+                .then(data => {
+                    const container = document.getElementById('chat-box-container');
+                    container.innerHTML = ''
+                    const comentList = data.comments
+        
+                    var button = document.getElementById('post');
+                    if (button.clickHandler) {
+                        button.removeEventListener('click', button.clickHandler);
+                    }
+
+                    // Define a new event listener with the current event context
+                    button.clickHandler = (function (currentEvent) {
+                        return function () {
+                            postComment(course, username, comentList, container)
+                        };
+                    })(course);
+
+                    // Add the new event listener to the button
+                    button.addEventListener('click', button.clickHandler);
+
+                    if (comentList.length === 0) {
+                        selection.textContent = 'Be the first in starting a discussion'
+                    } else {
+                        setList(comentList, container)
+                    }
+                })
+                .catch((error) => {
+                    console.error('Could not get event course:', error);
+                });
+        }
+    </script>
+
+    <script>
+        function setList(comentList, container) {
+            container.innerHTML = ''
+            comentList.forEach((comment) => {
+
+                const commentContainer = document.createElement('div');
+                commentContainer.className = 'single-comment';
+
+                const emptyProfile = document.createElement('img');
+                emptyProfile.className = 'profiel-empty'
+                emptyProfile.src = '/profile_empty.png';
+
+                const nameCommentDiv = document.createElement('div');
+                nameCommentDiv.className = 'name-comment-div';
+
+                const commentOwner = document.createElement('h6');
+                commentOwner.className = 'comment-owner';
+                commentOwner.textContent = comment.commenter
+
+                const commentChat = document.createElement('h4');
+                commentChat.className = 'comment';
+                commentChat.textContent = comment.comment
+
+                nameCommentDiv.appendChild(commentChat)
+                nameCommentDiv.appendChild(commentOwner)
+
+                commentContainer.appendChild(emptyProfile)
+                commentContainer.appendChild(nameCommentDiv)
+
+                container.appendChild(commentContainer)
+            })
+        }
+    </script>
+
+    <script>
+        function postComment(course, username, comentList, container) {
+
+            var courseTitle = encodeURIComponent(course.title);
+            var url = '/AddComment?major=' + courseTitle;
+
+            var inputElement = document.getElementById('text-comment');
+            var inputValue = inputElement.value;
+
+            var commentData = {
+                commenter: username,
+                comment: inputValue,
+                timestamp: new Date().toISOString(),
+                course: course.title
+            };
+
+            fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(commentData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        console.log("Response was not ok")
+                    }
+                })
+                .then(data => {
+                    console.log("commnet added successfuly")
+
+                    comentList.push(commentData)
+                    setList(comentList, container)
+                })
+                .catch((error) => {
+                    console.error('Could not post a comment:', error);
+                });
+        }
+    </script>
+</body>
+
+</html>
